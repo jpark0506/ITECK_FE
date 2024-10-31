@@ -4,7 +4,6 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error";
 import App from "./App";
-import Root from "./routes/root";
 import Main from "./containers/main";
 import Login from "./containers/login";
 import SignUp from "./containers/signup";
