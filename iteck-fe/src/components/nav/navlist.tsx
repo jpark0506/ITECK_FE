@@ -24,7 +24,7 @@ const NavList = (props: Props) => {
     <div className="w-full flex flex-1 flex-col text-white">
       {/* TODO: selected와 아닌 거 구분하기 */}
       {navList.length === 0 && (
-        <div className="w-full text-center font-normal text-md py-3 text-minor">
+        <div className="w-full text-center font-normal text-sm py-3 text-minor">
           실험을 추가해주세요
         </div>
       )}

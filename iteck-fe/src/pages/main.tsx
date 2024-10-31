@@ -1,10 +1,13 @@
 import React from "react";
 import LoginTitle from "../components/title/logintitle";
 import Plus from "../assets/component/plus";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const MainPage = (props: Props) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-1 h-full justify-center items-center">
       <div className="h-full w-3/4 flex flex-col justify-center items-start text-right space-y-3 pl-20">
@@ -15,7 +18,10 @@ const MainPage = (props: Props) => {
         <div className="w-full text-4xl font-semibold text-left">
           안녕하세요, 박준혁님!
         </div>
-        <button className="flex flex-row items-center justify-between text-left w-1/3 bg-primary text-white font-semibold pl-4 rounded-lg border-1 border-primary hover:border-white hover:bg-secondary transition-all py-2 px-4 space-x-2">
+        <button
+          onClick={() => navigate("/create")}
+          className="flex flex-row items-center justify-between text-left w-1/3 bg-primary text-white font-semibold pl-4 rounded-lg border-1 border-primary hover:border-white hover:bg-secondary transition-all py-2 px-4 space-x-2"
+        >
           <div>실험 분석 시작하기</div>
           <Plus />
         </button>

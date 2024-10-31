@@ -7,6 +7,9 @@ import App from "./App";
 import Main from "./containers/main";
 import Login from "./containers/login";
 import SignUp from "./containers/signup";
+import Create from "./containers/create";
+import CreateAnalysis from "./pages/analysis";
+import CreateSimulation from "./pages/simulation";
 
 const router = createBrowserRouter([
   {
@@ -20,14 +23,29 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        index: true,
         path: "/login",
         element: <Login />,
       },
       {
-        index: true,
         path: "/signup",
         element: <SignUp />,
+      },
+      {
+        path: "create",
+        children: [
+          {
+            path: "",
+            element: <Create />,
+          },
+          {
+            path: "analysis",
+            element: <CreateAnalysis />,
+          },
+          {
+            path: "simulation",
+            element: <CreateSimulation />,
+          },
+        ],
       },
     ],
   },
