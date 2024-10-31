@@ -9,5 +9,4 @@ export interface Experiment {
   executed_at: Date;
   memo: string;
   files: string[];
-  unique_factors: UniqueFactor[];
 }
