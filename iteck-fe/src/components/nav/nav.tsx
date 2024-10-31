@@ -9,10 +9,10 @@ const Nav = (props: Props) => {
   return (
     <div className="flex flex-col w-1/6 h-full bg-primary p-4 text-white">
       <div className="w-full text-left font-semibold text-4xl mb-2">I-TECK</div>
-      <div className="w-full text-left font-normal text-sm pb-2">
+      <div className="w-full text-left font-normal text-sm pb-3">
         실험을 위한 최적의 솔루션
       </div>
-      <div className="w-full text-left font-bold text-md pb-2">
+      <div className="w-full text-left font-bold text-md pb-3">
         박준혁님, 환영합니다.
       </div>
       <button className="flex flex-row space-x-2 items-center w-full px-4 py-2 border-1 bg-primary text-white hover:text-primary font-normal rounded-lg hover:bg-white text-left border-white transition-color duration-500">

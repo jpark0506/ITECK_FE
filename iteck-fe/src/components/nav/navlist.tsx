@@ -9,23 +9,28 @@ type NavList = {
 };
 
 const navList: NavList[] = [
-  {
-    date: "10월 28일",
-    titles: ["배터리 2차 실험", "배터리 2차 실험"],
-  },
-  {
-    date: "10월 27일",
-    titles: ["배터리 2차 실험", "배터리 2차 실험"],
-  },
+  // {
+  //   date: "10월 28일",
+  //   titles: ["배터리 2차 실험", "배터리 2차 실험"],
+  // },
+  // {
+  //   date: "10월 27일",
+  //   titles: ["배터리 2차 실험", "배터리 2차 실험"],
+  // },
 ];
 
 const NavList = (props: Props) => {
   return (
     <div className="w-full flex flex-1 flex-col text-white">
       {/* TODO: selected와 아닌 거 구분하기 */}
+      {navList.length === 0 && (
+        <div className="w-full text-center font-normal text-md py-3 text-minor">
+          실험을 추가해주세요
+        </div>
+      )}
       {navList.map((nav) => (
-        <div className="w-full text-left flex-col space-x-1 space-y-2 py-2">
-          <div className="pl-2 text-white font-semibold text-lg">
+        <div className="w-full text-left flex-col space-x-1 space-y-3 py-3">
+          <div className="pl-2 text-white font-semibold text-md">
             {nav.date}
           </div>
           {nav.titles.map((title) => (
