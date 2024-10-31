@@ -9,6 +9,10 @@ export default {
         minor: "#838891",
         green: "#399133",
       },
+      borderWidth: {
+        1: "1px",
+        0.5: "0.5px",
+      },
     },
   },
   plugins: [],

@@ -1,5 +1,7 @@
 import React from "react";
 import Plus from "../../assets/component/plus";
+import NavList from "./navlist";
+import LogoutButton from "./navlogoutbutton";
 
 type Props = {};
 
@@ -10,10 +12,15 @@ const Nav = (props: Props) => {
       <div className="w-full text-left font-normal text-sm pb-2">
         실험을 위한 최적의 솔루션
       </div>
-      <button className="flex flex-row space-x-2 items-center w-full px-4 py-3 border-2 bg-primary text-white hover:text-primary font-normal rounded-lg hover:bg-white text-left border-white transition-color duration-500">
+      <div className="w-full text-left font-bold text-md pb-2">
+        박준혁님, 환영합니다.
+      </div>
+      <button className="flex flex-row space-x-2 items-center w-full px-4 py-2 border-1 bg-primary text-white hover:text-primary font-normal rounded-lg hover:bg-white text-left border-white transition-color duration-500">
         <Plus />
         <div className="text-md ">실험 추가하기</div>
       </button>
+      <NavList />
+      <LogoutButton />
     </div>
   );
 };
