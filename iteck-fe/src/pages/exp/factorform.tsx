@@ -57,12 +57,13 @@ const FactorForm = (props: Props) => {
   // 완료 버튼 클릭 시 상태 출력 함수
   const handleComplete = () => {
     const finalData = getExperiment();
+    console.log(finalData);
     const alertData = JSON.stringify(
       { ...finalData, electrode, uniqueFactors },
       null,
       2
     );
-    alert(`최종 입력 데이터:\n${alertData}`);
+    console.log(alertData);
   };
 
   return (

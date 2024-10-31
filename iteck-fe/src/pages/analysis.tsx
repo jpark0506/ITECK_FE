@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Nav from "../components/nav/nav";
 import { useLoginStore } from "../store/auth";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DefaultForm from "../pages/exp/defaultform";
 import FileForm from "../pages/exp/fileform";
 import FactorForm from "../pages/exp/factorform";
