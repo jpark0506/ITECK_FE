@@ -1,17 +1,5 @@
 import { create } from "zustand";
-import { ExperimentFile, UniqueFactor } from "../types/experiment";
-
-interface Factor {
-  name: string; // 고유 인자 이름 (예: 활물질, 바인더)
-  type: string;
-  amount: number;
-}
-
-interface Electrode {
-  area: string;
-  loading: string;
-  rollingRate: string;
-}
+import { ExperimentFile, Electrode, Factor } from "../types/experiment";
 
 interface ExperimentStore {
   experiments: ExperimentFile[];
@@ -21,8 +9,7 @@ interface ExperimentStore {
   addFiles: (files: File[]) => void;
   deleteFile: (index: number) => void;
   updateFactor: (fileIndex: number, factorIndex: number, factor: Partial<Factor>) => void;
-  electrode: Electrode;
-  updateElectrode: (electrode: Partial<Electrode>) => void;
+  updateElectrode: (fileIndex: number, electrode: Partial<Electrode>) => void;
 }
 
 export const useExperimentStore = create<ExperimentStore>((set, get) => ({
@@ -51,6 +38,7 @@ export const useExperimentStore = create<ExperimentStore>((set, get) => ({
             { name: "도전체", type: "", amount: 0 },
             { name: "전해질", type: "", amount: 0 },
           ],
+          electrode: { area: "", loading: "", rollingRate: "" }, // 각 파일의 고유 전극 데이터
         })),
       ],
     }));
@@ -74,10 +62,16 @@ export const useExperimentStore = create<ExperimentStore>((set, get) => ({
       ),
     }));
   },
-  electrode: { area: "", loading: "", rollingRate: "" },
-  updateElectrode: (electrode) => {
+  updateElectrode: (fileIndex, electrode) => {
     set((state) => ({
-      electrode: { ...state.electrode, ...electrode },
+      experiments: state.experiments.map((exp, i) =>
+        i === fileIndex
+          ? {
+              ...exp,
+              electrode: { ...exp.electrode, ...electrode },
+            }
+          : exp
+      ),
     }));
   },
 }));

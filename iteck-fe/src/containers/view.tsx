@@ -1,6 +1,6 @@
 import React from 'react'
 import Nav from '../components/nav/nav'
-import { useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import EditSecondary from '../assets/component/edit_secondary';
 import EditMinor from '../assets/component/edit_minor';
 
@@ -10,6 +10,8 @@ type Props = {
 const ExpView = (props: Props) => {
 
     const { id } = useParams();
+
+    const navigate = useNavigate();
 
     const [data, setData] = React.useState({
         id: 0,
@@ -58,7 +60,7 @@ const ExpView = (props: Props) => {
                             <br />
                         </p>
                         <button
-                            onClick={() => { }}
+                            onClick={() => navigate(`/view/${id}/factor/select`)}
                             className="bg-primary font-bold px-10 py-4 text-white border-white border-1 text-sm rounded-lg mt-4 hover:bg-white hover:text-primary hover:border-primary transition-all "
                         >
                             시작하기
@@ -70,7 +72,10 @@ const ExpView = (props: Props) => {
                             업로드한 데이터로, 배터리 충방전 시뮬레이션을 돌려볼 수 있어요!
                         </p>
                         <button
-                            onClick={() => { }}
+                            onClick={() => {
+                                alert('미완성된 기능입니다.')
+                                //navigate(`/view/${id}/simulation`)
+                            }}
                             className="bg-primary font-bold px-10 py-4 text-white border-white border-1 text-sm rounded-lg mt-4 hover:bg-white hover:text-primary hover:border-primary transition-all "
                         >
                             시작하기

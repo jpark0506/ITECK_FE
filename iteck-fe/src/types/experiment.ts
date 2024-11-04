@@ -1,13 +1,20 @@
-export interface UniqueFactor {
+export interface Factor {
   name: string;
   type: string;
-  amount: number;
+  amount: number
+  ;
 }
 
+export interface Electrode {
+  area: string;
+  loading: string;
+  rollingRate: string;
+}
 export interface ExperimentFile {
   name: string;
   file: File;
-  factor: UniqueFactor[];
+  factor: Factor[];
+  electrode: Electrode;
 }
 
 export interface ExperimentInfo {

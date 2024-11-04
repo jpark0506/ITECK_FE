@@ -87,7 +87,7 @@ const FileForm = (props: Props) => {
                     <div className="text-white font-semibold text-xl">{experiment.name}</div>
 
                     <button
-                      className="w-full py-2 bg-white text-green rounded-md mt-5"
+                      className="w-full py-2 bg-white text-green hover:bg-gray-300 rounded-md mt-5 transition-all"
                       onClick={() => onOpen(index)}
                     >
                       고유 인자 입력하기
@@ -108,7 +108,7 @@ const FileForm = (props: Props) => {
 
                     <button
                       onClick={() => deleteFile(index)}
-                      className="flex-1 text-red-500 hover:text-white hover:bg-red-500 transition-all px-1 rounded-md border-1 border-red-500 mt-2"
+                      className="w-full py-2 bg-red-500 hover:bg-red-400 transition-all text-white rounded-md mt-5"
                     >
                       삭제
                     </button>
@@ -121,6 +121,7 @@ const FileForm = (props: Props) => {
           </div>
         </div>
         <div className="flex flex-row w-full justify-between items-end mt-2">
+          <div></div>
           <button
             onClick={() => { }}
             className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light"

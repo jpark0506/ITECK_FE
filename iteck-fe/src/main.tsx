@@ -11,6 +11,9 @@ import Create from "./containers/create";
 import CreateAnalysis from "./pages/analysis";
 import ExpView from "./containers/view";
 import FileForm from "./pages/exp/fileform";
+import Analysis from "./pages/view/analysis";
+import Simulation from "./pages/view/simulation";
+import FactorSelectView from "./pages/view/factorSelectView";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +37,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/view/:id",
-        element: <ExpView />
+        element: <ExpView />,
+      },
+      {
+        path: "/view/:id/analysis",
+        element: <Analysis />
+      },
+      {
+        path: "/view/:id/simulation",
+        element: <Simulation />
+      },
+      {
+        path: "/view/:id/factor/select",
+        element: <FactorSelectView />
       },
       {
         path: "create",

@@ -13,7 +13,6 @@ const FactorModal = ({ isOpen, onClose, onSubmit, fileIndex }: Props) => {
   const {
     experiments,
     updateFactor,
-    electrode,
     updateElectrode,
   } = useExperimentStore();
 
@@ -101,11 +100,11 @@ const FactorModal = ({ isOpen, onClose, onSubmit, fileIndex }: Props) => {
                   </div>
                   <input
                     type="number"
-                    value={electrode.area || ""}
+                    value={experiment.electrode.area || ""}
                     onChange={(e) => {
                       const area = e.target.value;
                       if (!isNaN(Number(area))) {
-                        updateElectrode({ area });
+                        updateElectrode(fileIndex!, { area });
                       }
                     }}
                     placeholder="면적을 입력해주세요"
@@ -118,11 +117,11 @@ const FactorModal = ({ isOpen, onClose, onSubmit, fileIndex }: Props) => {
                   </div>
                   <input
                     type="number"
-                    value={electrode.loading || ""}
+                    value={experiment.electrode.loading || ""}
                     onChange={(e) => {
                       const loading = e.target.value;
                       if (!isNaN(Number(loading))) {
-                        updateElectrode({ loading });
+                        updateElectrode(fileIndex!, { loading });
                       }
                     }}
                     placeholder="로딩량을 입력해주세요"
@@ -136,11 +135,11 @@ const FactorModal = ({ isOpen, onClose, onSubmit, fileIndex }: Props) => {
                 </div>
                 <input
                   type="number"
-                  value={electrode.rollingRate || ""}
+                  value={experiment.electrode.rollingRate || ""}
                   onChange={(e) => {
                     const rollingRate = e.target.value;
                     if (!isNaN(Number(rollingRate))) {
-                      updateElectrode({ rollingRate });
+                      updateElectrode(fileIndex!, { rollingRate });
                     }
                   }}
                   placeholder="압연율을 입력해주세요"
