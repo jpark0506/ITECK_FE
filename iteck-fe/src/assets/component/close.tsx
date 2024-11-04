@@ -1,6 +1,6 @@
 import * as React from "react";
 type Props = {}
-const CloseIcon = (props) => (
+const CloseIcon = (props: Props) => (
     <svg
         width={24}
         height={24}
