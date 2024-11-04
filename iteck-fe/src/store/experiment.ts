@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { Experiment } from "../types/experiment";
+import { ExperimentFile, UniqueFactor } from "../types/experiment";
 
 interface Factor {
   name: string; // 고유 인자 이름 (예: 활물질, 바인더)
   type: string;
-  amount: string;
+  amount: number;
 }
 
 interface Electrode {
@@ -14,62 +14,63 @@ interface Electrode {
 }
 
 interface ExperimentStore {
-  experiment: Experiment;
-  updateExperiment: (experiment: Partial<Experiment>) => void;
-  getExperiment: () => Partial<Experiment>;
-  initExperiment: () => void;
+  experiments: ExperimentFile[];
+  updateExperiment: (index: number, experiment: Partial<ExperimentFile>) => void;
+  initExperiments: () => void;
   uploadedFiles: File[];
   addFiles: (files: File[]) => void;
   deleteFile: (index: number) => void;
-  uniqueFactors: Factor[];
-  updateFactor: (index: number, factor: Partial<Factor>) => void;
+  updateFactor: (fileIndex: number, factorIndex: number, factor: Partial<Factor>) => void;
   electrode: Electrode;
   updateElectrode: (electrode: Partial<Electrode>) => void;
 }
 
 export const useExperimentStore = create<ExperimentStore>((set, get) => ({
-  experiment: {
-    title: "",
-    executed_at: new Date(),
-    memo: "",
-    files: [],
-    unique_factors: [],
+  experiments: [],
+  updateExperiment: (index, experiment) => {
+    set((state) => ({
+      experiments: state.experiments.map((exp, i) =>
+        i === index ? { ...exp, ...experiment } : exp
+      ),
+    }));
   },
-  updateExperiment: (experiment: Partial<Experiment>) => {
-    set({ experiment: { ...get().experiment, ...experiment } });
-  },
-  getExperiment: () => get().experiment,
-  initExperiment: () => {
-    set({
-      experiment: {
-        title: "",
-        executed_at: new Date(),
-        memo: "",
-        files: [],
-      },
-    });
+  initExperiments: () => {
+    set({ experiments: [] });
   },
   uploadedFiles: [],
   addFiles: (files: File[]) => {
     set((state) => ({
-      uploadedFiles: [...state.uploadedFiles, ...files],
+      experiments: [
+        ...state.experiments,
+        ...files.map((file) => ({
+          name: file.name,
+          file: file,
+          factor: [
+            { name: "활물질", type: "", amount: 0 },
+            { name: "바인더", type: "", amount: 0 },
+            { name: "도전체", type: "", amount: 0 },
+            { name: "전해질", type: "", amount: 0 },
+          ],
+        })),
+      ],
     }));
   },
   deleteFile: (index: number) => {
     set((state) => ({
-      uploadedFiles: state.uploadedFiles.filter((_, i) => i !== index),
+      experiments: state.experiments.filter((_, i) => i !== index),
     }));
   },
-  uniqueFactors: [
-    { name: "활물질", type: "", amount: "" },
-    { name: "바인더", type: "", amount: "" },
-    { name: "도전체", type: "", amount: "" },
-    { name: "전해질", type: "", amount: "" },
-  ],
-  updateFactor: (index, factor) => {
+  updateFactor: (fileIndex, factorIndex, factor) => {
     set((state) => ({
-      uniqueFactors: state.uniqueFactors.map((f, i) =>
-        i === index ? { ...f, ...factor } : f
+      experiments: state.experiments.map((exp, i) =>
+        i === fileIndex
+          ? {
+              ...exp,
+              factor: exp.factor.map((f, j) =>
+                j === factorIndex ? { ...f, ...factor } : f
+              ),
+            }
+          : exp
       ),
     }));
   },

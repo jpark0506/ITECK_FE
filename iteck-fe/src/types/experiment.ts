@@ -4,9 +4,15 @@ export interface UniqueFactor {
   amount: number;
 }
 
-export interface Experiment {
+export interface ExperimentFile {
+  name: string;
+  file: File;
+  factor: UniqueFactor[];
+}
+
+export interface ExperimentInfo {
+  userName:string;
   title: string;
-  executed_at: Date;
-  memo: string;
-  files: string[];
+  memo:string;
+  expDate: string;
 }

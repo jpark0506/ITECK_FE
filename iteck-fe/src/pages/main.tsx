@@ -19,10 +19,17 @@ const MainPage = (props: Props) => {
           안녕하세요, 박준혁님!
         </div>
         <button
-          onClick={() => navigate("/create")}
+          onClick={() => navigate("/create/analysis")}
           className="flex flex-row items-center justify-between text-left w-1/3 bg-primary text-white font-semibold pl-4 rounded-lg border-1 border-primary hover:border-white hover:bg-secondary transition-all py-2 px-4 space-x-2"
         >
-          <div>실험 분석 시작하기</div>
+          <div>실험 분석 추가하기</div>
+          <Plus />
+        </button>
+        <button
+          onClick={() => navigate("/upload")}
+          className="flex flex-row items-center justify-between text-left w-1/3 bg-green text-white font-semibold pl-4 rounded-lg border-1 border-green hover:border-white hover:bg-secondary transition-all py-2 px-4 space-x-2"
+        >
+          <div>데이터 추가하기</div>
           <Plus />
         </button>
       </div>

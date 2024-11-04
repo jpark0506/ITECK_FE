@@ -9,7 +9,8 @@ import Login from "./containers/login";
 import SignUp from "./containers/signup";
 import Create from "./containers/create";
 import CreateAnalysis from "./pages/analysis";
-import CreateSimulation from "./pages/simulation";
+import ExpView from "./containers/view";
+import FileForm from "./pages/exp/fileform";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
         index: true,
         path: "",
         element: <Main />,
+
       },
       {
         path: "/login",
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignUp />,
+      },
+      {
+        path: "/view/:id",
+        element: <ExpView />
       },
       {
         path: "create",
@@ -43,10 +49,14 @@ const router = createBrowserRouter([
           },
           {
             path: "simulation",
-            element: <CreateSimulation />,
+            element: <Create />,
           },
+
         ],
-      },
+      }, {
+        path: "/upload",
+        element: <FileForm />
+      }
     ],
   },
 ]);

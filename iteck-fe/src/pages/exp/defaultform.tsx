@@ -1,35 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useExperimentStore } from "../../store/experiment";
+import { usePostExpInfo } from "../../api/api";
+
 
 type Props = {
-  increase: () => void;
 };
 
 const DefaultForm = (props: Props) => {
-  const { increase } = props;
 
-  // Zustand store에서 상태와 업데이트 함수 가져오기
-  const { experiment, updateExperiment } = useExperimentStore();
 
   // 로컬 상태를 사용해 입력 필드 값을 관리
-  const [experimentTitle, setExperimentTitle] = useState(
-    experiment.title || ""
-  );
-  const [experimentDate, setExperimentDate] = useState(
-    experiment.executed_at
-      ? new Date(experiment.executed_at).toISOString().slice(0, 10)
-      : ""
-  );
-  const [experimentMemo, setExperimentMemo] = useState(experiment.memo || "");
+  const [experimentTitle, setExperimentTitle] = useState("");
+  const [experimentDate, setExperimentDate] = useState(new Date().toISOString().split("T")[0]);
+  const [experimentMemo, setExperimentMemo] = useState("");
 
-  // 상태가 변경될 때마다 zustand 스토어에 업데이트
-  useEffect(() => {
-    updateExperiment({
-      title: experimentTitle,
-      executed_at: new Date(experimentDate),
-      memo: experimentMemo,
-    });
-  }, [experimentTitle, experimentDate, experimentMemo, updateExperiment]);
+  const { isError, isSuccess, isPending, mutate } = usePostExpInfo();
 
   return (
     <div className="flex-1 flex flex-col py-10 px-20">
@@ -76,10 +60,17 @@ const DefaultForm = (props: Props) => {
       <div className="flex flex-row w-full justify-between items-end mt-2">
         <div></div>
         <button
-          onClick={() => increase()}
+          onClick={() => {
+            mutate({
+              userName: "프론트",
+              title: experimentTitle,
+              memo: experimentMemo,
+              expDate: experimentDate,
+            });
+          }}
           className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light"
         >
-          다음
+          추가하기
         </button>
       </div>
     </div>
