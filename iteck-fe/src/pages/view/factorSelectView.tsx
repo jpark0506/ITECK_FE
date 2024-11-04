@@ -86,7 +86,13 @@ const FactorSelection = () => {
         <div className="flex flex-row w-full justify-between items-end mt-2">
           <div></div>
           <button
-            onClick={() => navigate(`/view/${id}/analysis`)}
+            onClick={() => {
+              if (factors.filter((factor) => factor.isVariable).length === 0) {
+                alert("변동 인자를 선택해주세요.");
+                return;
+              }
+              navigate(`/view/${id}/analysis`);
+            }}
             className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light"
           >
             분석하기

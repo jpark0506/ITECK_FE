@@ -52,10 +52,10 @@ const ExpView = (props: Props) => {
                         <p className="w-full flex-1 text-left text-minor font-normal text-lg pt-4 ">
                             아래와 같은 정리된 그래프를 볼 수 있어요!
                             <ul className="list-disc w-full pl-5">
-                                <li>전류 / 전압</li>
-                                <li>사이클 / 용량</li>
-                                <li>전기용량(dQ/dV) / 전압</li>
-                                <li> 사용자 지정 그래프</li>
+                                <li>시간 - 전류/전압</li>
+                                <li>사이클 - 용량/쿨롱효율</li>
+                                <li>전압 - dQ/dV</li>
+                                <li>사용자 지정 그래프</li>
                             </ul>
                             <br />
                         </p>
@@ -69,7 +69,7 @@ const ExpView = (props: Props) => {
                     <div className="flex flex-col flex-1 h-full rounded-2xl border-1 text-primary border-primary justify-start items-center p-10 group-hover:bg-primary group-hover:text-white transition-colors">
                         <div className="w-full text-left font-bold text-3xl">시뮬레이션</div>
                         <p className="w-full h-full flex-1 text-left text-minor font-normal text-lg pt-4 ">
-                            업로드한 데이터로, 배터리 충방전 시뮬레이션을 돌려볼 수 있어요!
+                            실험하고자 하는 조건으로 시뮬레이션을 이용해 결과 데이터를 예측 해보세요!
                         </p>
                         <button
                             onClick={() => {

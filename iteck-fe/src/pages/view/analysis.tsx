@@ -4,6 +4,8 @@ import EditSecondary from '../../assets/component/edit_secondary'
 import EditMinor from '../../assets/component/edit_minor'
 import { useNavigate, useNavigation, useParams } from 'react-router-dom'
 import Arrow from '../../assets/component/arrow'
+import Filter from '../../assets/component/filter'
+import Warning from '../../assets/component/warning'
 
 type Props = {}
 
@@ -39,21 +41,21 @@ const Analysis = (props: Props) => {
                         <Arrow />
                     </button>
                     <div className='text-3xl text-secondary font-semibold'>
-                        그래프 분석 / 이상치 감지
+                        그래프 분석
                     </div>
                 </div>
                 <div className="border-1 border-minor w-full mt-5"></div>
                 <div className='flex flex-row w-full'>
-                    <div className='flex flex-col flex-1 w-full'>
+                    <div className='flex flex-col flex-1 w-3/4'>
                         <div className='flex flex-row space-x-6 text-minor text-xl mt-4 w-full'>
                             <div>
-                                전류 / 전압
+                                시간 - 전류/전압
                             </div>
                             <div>
-                                사이클 / 용량
+                                사이클 - 용량/쿨롱효율
                             </div>
                             <div>
-                                전기용량(dQ/dV) / 전압
+                                전압 - dQ/dV
                             </div>
                             <div>
                                 사용자 지정 그래프
@@ -64,8 +66,19 @@ const Analysis = (props: Props) => {
                             그래프 표시
                         </div>
                     </div>
-                    <div className='flex flex-col flex-1 pl-4'>
-                        <div className='text-secondary text-2xl font-semibold mt-4'>파일 목록</div>
+                    <div className='flex flex-col w-1/3 pl-4 mt-4'>
+                        <div className='flex flex-row w-full justify-between items-center'>
+                            <div className='text-secondary text-2xl font-semibold'>데이터 목록</div>
+                            <div className='flex flex-row space-x-2'>
+                                <button onClick={() => alert("이상치 버튼입니다!")}>
+                                    <Warning />
+                                </button>
+                                <button onClick={() => navigate(`/view/${id}/factor/select`)}>
+                                    <Filter />
+                                </button>
+                            </div>
+
+                        </div>
                         <div className="border-1 border-minor w-full mt-3"></div>
                         <div className='w-full h-full'>
                             파일 목록
