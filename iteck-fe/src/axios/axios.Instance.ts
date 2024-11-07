@@ -2,7 +2,6 @@ import axios, { AxiosInstance } from 'axios';
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: '/api',
-  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
