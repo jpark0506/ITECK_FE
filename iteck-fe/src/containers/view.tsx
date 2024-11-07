@@ -16,17 +16,24 @@ const ExpView = (props: Props) => {
 
     const { isError, isSuccess, isPending, data } = useGetExpMeta(id!);
 
+    if (isPending) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error loading data. Please try again.</div>;
+    }
 
     return (
         <div className="w-full h-full flex flex-row">
             <Nav index={id} />
             <div className="flex-1 flex flex-col items-start justify-start p-10 overflow-auto">
                 <div className='w-full flex items-end justify-start pb-3 space-x-2'>
-                    <div className="text-4xl font-bold">{data!.data.title || "빈 제목"}</div>
+                    <div className="text-4xl font-bold">{data?.data?.title || "빈 제목"}</div>
                     <EditSecondary />
                 </div>
                 <div className='w-full flex flex-row items-end justify-start pb-3 space-x-2'>
-                    <div className="text-xl font-semib text-minor">실험일자 :{data!.data.expDate || "빈 날짜"}  </div>
+                    <div className="text-xl font-semib text-minor">실험일자 :{data?.data?.expDate || "빈 날짜"}  </div>
                     <EditMinor />
                 </div>
                 <div className="border-1 border-minor w-full"></div>
@@ -35,9 +42,8 @@ const ExpView = (props: Props) => {
                         <div className="text-xl font-semibold text-secondary">실험 메모</div>
                         <EditSecondary />
                     </div>
-                    {/* 여러줄인거 고려하기 */}
                     <div className='w-full flex flex-col'>
-                        <div className="text-lg font-normal text-minor">{data!.data.memo || "빈 메모"}</div>
+                        <div className="text-lg font-normal text-minor">{data?.data?.memo || "빈 메모"}</div>
                     </div>
                 </div>
                 <div className="text-3xl font-semibold text-primary pt-5 pb-5">조회할 항목을 선택해주세요</div>
@@ -79,10 +85,9 @@ const ExpView = (props: Props) => {
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
     )
 }
 
-export default ExpView
+export default ExpView;
