@@ -31,7 +31,7 @@ const DefaultForm = (props: Props) => {
   useEffect(() => {
     if (isSuccess) {
       alert('성공적으로 추가되었습니다.')
-      navigate('')
+      navigate("/")
     }
   }, [isSuccess])
 
