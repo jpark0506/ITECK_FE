@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       "^/api/.*": { // 정규식을 사용하여 정확히 "/api" 경로에 대해서만 프록시 적용
-        target: "https://iteck.duckdns.org:8080",
+        target: "https://iteck.duckdns.org",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
