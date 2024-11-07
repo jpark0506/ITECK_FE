@@ -9,7 +9,7 @@ type Props = {};
 const CreateAnalysis = (props: Props) => {
   const { isLogin } = useLoginStore();
 
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState('');
 
   const navigate = useNavigate();
 

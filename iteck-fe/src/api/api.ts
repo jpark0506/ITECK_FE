@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ExperimentInfo } from "../types/experiment";
 import { GetAxiosInstance, PostAxiosInstance } from "../axios/axios";
-
 export const usePostExpInfo = () => {
     const { isError, isSuccess, isPending, mutate } = useMutation({
     mutationFn: async (data : ExperimentInfo) => {
-      return await PostAxiosInstance<ExperimentInfo>("/experiment", data);
+      return await PostAxiosInstance<ExperimentInfo>("/exp/meta/post", data);
     },
   });
   return {
@@ -16,11 +15,13 @@ export const usePostExpInfo = () => {
   };
 }
 
-export const getExpList = () => {
-  const { isError, isSuccess, isPending, data } = useQuery({
+export const useGetExpList = (name:string) => {
+
+  const { isError, isSuccess, isPending, data } = useQuery<ExperimentInfo[]>({
     queryKey: ['experiment'],
     queryFn: async () => {
-      return await GetAxiosInstance("/experiment/list");
+      const response = await GetAxiosInstance<ExperimentInfo[]>(`/exp/meta/get?userName=${name}`);
+      return response.data.data;
     }
   })
   return {
@@ -31,11 +32,11 @@ export const getExpList = () => {
   };
 }
 
-export const getExp = () => {
+export const getExpMeta = (metaId:string) => {
   const { isError, isSuccess, isPending, data } = useQuery({
     queryKey: ['experiment'],
     queryFn: async () => {
-      return await GetAxiosInstance("/experiment");
+      return await GetAxiosInstance(`/exp/meta/get/${metaId}`);
     }
   })
 

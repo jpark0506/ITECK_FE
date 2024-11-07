@@ -18,8 +18,9 @@ export interface ExperimentFile {
 }
 
 export interface ExperimentInfo {
+  id:string;
+  expDate:string;
   userName:string;
   title: string;
   memo:string;
-  expDate: string;
 }

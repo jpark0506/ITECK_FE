@@ -49,7 +49,7 @@ const FactorSelection = () => {
 
   return (
     <div className="w-full h-full flex flex-row">
-      <Nav index={Number(id)} />
+      <Nav index={id} />
       <div className="flex flex-col w-full items-start p-10">
         <div className="w-full text-left font-bold text-4xl">
           고정인자/변동인자 선택하기

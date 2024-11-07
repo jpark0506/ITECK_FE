@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { usePostExpInfo } from "../../api/api";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 
 type Props = {
@@ -13,7 +14,27 @@ const DefaultForm = (props: Props) => {
   const [experimentDate, setExperimentDate] = useState(new Date().toISOString().split("T")[0]);
   const [experimentMemo, setExperimentMemo] = useState("");
 
-  const { isError, isSuccess, isPending, mutate } = usePostExpInfo();
+  const { mutate, isSuccess } = usePostExpInfo();
+
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    mutate({
+      id: '',
+      userName: "박진영",
+      title: experimentTitle,
+      memo: experimentMemo,
+      expDate: new Date(experimentDate).toISOString().split("T")[0]
+    });
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      alert('성공적으로 추가되었습니다.')
+      navigate('')
+    }
+  }, [isSuccess])
+
 
   return (
     <div className="flex-1 flex flex-col py-10 px-20">
@@ -60,14 +81,7 @@ const DefaultForm = (props: Props) => {
       <div className="flex flex-row w-full justify-between items-end mt-2">
         <div></div>
         <button
-          onClick={() => {
-            mutate({
-              userName: "프론트",
-              title: experimentTitle,
-              memo: experimentMemo,
-              expDate: experimentDate,
-            });
-          }}
+          onClick={() => handleSubmit()}
           className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light"
         >
           추가하기

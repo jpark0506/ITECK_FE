@@ -5,14 +5,14 @@ import LogoutButton from "./navlogoutbutton";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  index?: number;
+  index?: string;
   analysis?: boolean;
   simulation?: boolean;
 };
 
 const Nav = (props: Props) => {
   const navigate = useNavigate();
-  const { index } = props
+  const { index } = props;
   return (
     <div className="flex flex-col w-1/6 h-full bg-primary p-4 text-white">
       <div

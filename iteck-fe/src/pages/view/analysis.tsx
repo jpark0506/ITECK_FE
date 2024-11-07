@@ -25,7 +25,7 @@ const Analysis = (props: Props) => {
 
     return (
         <div className='w-full h-full flex flex-row'>
-            <Nav index={Number(id)} />
+            <Nav index={id} />
             <div className="flex-1 flex flex-col items-start justify-start p-10 overflow-auto">
                 <div className='w-full flex items-end justify-start pb-3 space-x-2'>
                     <div className="text-4xl font-bold">{data.title}</div>
