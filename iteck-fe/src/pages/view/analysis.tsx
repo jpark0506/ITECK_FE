@@ -6,20 +6,25 @@ import { useNavigate, useNavigation, useParams } from 'react-router-dom'
 import Arrow from '../../assets/component/arrow'
 import Filter from '../../assets/component/filter'
 import Warning from '../../assets/component/warning'
+import { useGetExpMeta } from '../../api/api'
+import ExpView from '../../containers/view';
+import { ExperimentInfo } from '../../types/experiment';
 
 type Props = {}
 
 const Analysis = (props: Props) => {
 
-    const [data, setData] = React.useState({
-        id: 0,
-        date: "2024.10.10",
-        title: "배터리 2차 시험",
-        memo: "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
-    });
+    // const [data, setData] = React.useState({
+    //     id: 0,
+    //     date: "2024.10.10",
+    //     title: "배터리 2차 시험",
+    //     memo: "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
+    // });
 
 
     const { id } = useParams();
+
+    const { isError, isSuccess, isPending, data } = useGetExpMeta(id!);
 
     const navigate = useNavigate();
 
@@ -28,11 +33,11 @@ const Analysis = (props: Props) => {
             <Nav index={id} />
             <div className="flex-1 flex flex-col items-start justify-start p-10 overflow-auto">
                 <div className='w-full flex items-end justify-start pb-3 space-x-2'>
-                    <div className="text-4xl font-bold">{data.title}</div>
+                    <div className="text-4xl font-bold">{data!.data.title || "제목 없음"}</div>
                     <EditSecondary />
                 </div>
                 <div className='w-full flex flex-row items-end justify-start pb-3 space-x-2'>
-                    <div className="text-xl font-normal text-minor">실험일자 :{data.date} </div>
+                    <div className="text-xl font-normal text-minor">실험일자 :{data!.data.date || "날짜 없음"}</div>
                     <EditMinor />
                 </div>
 

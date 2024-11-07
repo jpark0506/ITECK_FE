@@ -3,6 +3,7 @@ import Nav from '../components/nav/nav'
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import EditSecondary from '../assets/component/edit_secondary';
 import EditMinor from '../assets/component/edit_minor';
+import { useGetExpMeta } from '../api/api';
 
 type Props = {
 }
@@ -13,23 +14,19 @@ const ExpView = (props: Props) => {
 
     const navigate = useNavigate();
 
-    const [data, setData] = React.useState({
-        id: 0,
-        date: "2024.10.10",
-        title: "배터리 2차 시험",
-        memo: "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
-    });
+    const { isError, isSuccess, isPending, data } = useGetExpMeta(id!);
+
 
     return (
         <div className="w-full h-full flex flex-row">
             <Nav index={id} />
             <div className="flex-1 flex flex-col items-start justify-start p-10 overflow-auto">
                 <div className='w-full flex items-end justify-start pb-3 space-x-2'>
-                    <div className="text-4xl font-bold">{data.title}</div>
+                    <div className="text-4xl font-bold">{data!.data.title}</div>
                     <EditSecondary />
                 </div>
                 <div className='w-full flex flex-row items-end justify-start pb-3 space-x-2'>
-                    <div className="text-xl font-semib text-minor">실험일자 :{data.date} </div>
+                    <div className="text-xl font-semib text-minor">실험일자 :{data!.data.date} </div>
                     <EditMinor />
                 </div>
                 <div className="border-1 border-minor w-full"></div>
@@ -40,7 +37,7 @@ const ExpView = (props: Props) => {
                     </div>
                     {/* 여러줄인거 고려하기 */}
                     <div className='w-full flex flex-col'>
-                        <div className="text-lg font-normal text-minor">{data.memo}</div>
+                        <div className="text-lg font-normal text-minor">{data!.data.memo}</div>
                     </div>
                 </div>
                 <div className="text-3xl font-semibold text-primary pt-5 pb-5">조회할 항목을 선택해주세요</div>

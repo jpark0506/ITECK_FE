@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ExperimentInfo } from "../types/experiment";
 import { GetAxiosInstance, PostAxiosInstance } from "../axios/axios";
+import ExpView from '../containers/view';
 export const usePostExpInfo = () => {
     const { isError, isSuccess, isPending, mutate } = useMutation({
     mutationFn: async (data : ExperimentInfo) => {
@@ -32,7 +33,7 @@ export const useGetExpList = (name:string) => {
   };
 }
 
-export const getExpMeta = (metaId:string) => {
+export const useGetExpMeta = (metaId:string) => {
   const { isError, isSuccess, isPending, data } = useQuery({
     queryKey: ['experiment'],
     queryFn: async () => {
