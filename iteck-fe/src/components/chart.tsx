@@ -1,5 +1,15 @@
-import React, { useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import React from "react";
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    DotProps
+} from "recharts";
 
 type CycleData = {
     cycleIndex: number;
@@ -22,9 +32,19 @@ const CycleDataChart: React.FC<CycleDataChartProps> = ({ cycleDatas }) => {
         dchgOutlying: data.dchgOutlying,
     }));
 
-    useEffect(() => {
-        console.log("Formatted data for chart:", formattedData);
-    }, [formattedData]);
+    const renderDot = (props: any) => {
+        const { cx, cy, stroke, payload } = props;
+        const isOutlying = payload.chgOutlying || payload.dchgOutlying;
+        return (
+            <circle
+                cx={cx}
+                cy={cy}
+                r={isOutlying ? 5 : 3}
+                fill={isOutlying ? "red" : stroke}
+                stroke="none"
+            />
+        );
+    };
 
     return (
         <ResponsiveContainer width="100%" height={500}>
@@ -34,8 +54,21 @@ const CycleDataChart: React.FC<CycleDataChartProps> = ({ cycleDatas }) => {
                 <YAxis label={{ value: "Capacity", angle: -90, position: "insideLeft" }} />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="chgCap" stroke="#8884d8" name="Charge Capacity" />
-                <Line type="monotone" dataKey="dchgCap" stroke="#82ca9d" name="Discharge Capacity" />
+
+                <Line
+                    type="monotone"
+                    dataKey="chgCap"
+                    stroke="#8884d8"
+                    name="Charge Capacity"
+                    dot={renderDot}
+                />
+                <Line
+                    type="monotone"
+                    dataKey="dchgCap"
+                    stroke="#82ca9d"
+                    name="Discharge Capacity"
+                    dot={renderDot}
+                />
             </LineChart>
         </ResponsiveContainer>
     );
