@@ -11,6 +11,7 @@ import VoltageGraph from './graphs/voltage';
 import TimeGraph from './graphs/time';
 import CycleGraph from './graphs/cycle';
 import { useGetExpMeta, useGetExpResult } from '../../api/api';
+import DetectGraph from './graphs/detect';
 
 type Props = {};
 
@@ -29,7 +30,7 @@ const GraphPage: React.FC<{
     dataKey?: "current" | "voltage" | "dchgToChg" | "chgToDchg",
     isFetching: boolean,
     isSuccess: boolean,
-    method: "time" | "cycle" | "voltage",
+    method: "time" | "cycle" | "voltage" | "detect",
 }> = ({ page, data, dataKey = "current", isFetching, isSuccess, method }) => {
 
     if (isFetching) {
@@ -59,8 +60,17 @@ const GraphPage: React.FC<{
         case 2:
             const voltageKey = data?.voltageDatas && Object.keys(data.voltageDatas);
             const voltageData = data?.voltageDatas[voltageKey];
-            return voltageData ? <VoltageGraph voltageData={voltageData} /> : <p>Voltage data is unavailable.</p>;
+            console.log()
+            return voltageData ? < VoltageGraph voltageData={voltageData} /> : <p>Voltage data is unavailable.</p>;
 
+        case 3:
+            const detectKey = data?.cycleDatas && Object.keys(data.cycleDatas);
+            const detectData = data?.cycleDatas[detectKey];
+            console.log(detectData)
+            if (!detectData || detectData.length === 0) {
+                return <p>Detect data is unavailable.</p>;
+            }
+            return detectData ? <DetectGraph data={detectData} /> : <p>Detect data is unavailable.</p>;
         default:
             return <LoadingSpinner />;
     }
@@ -72,10 +82,11 @@ const TabButton: React.FC<{ index: number, currentIndex: number, setCurrentIndex
     </button>
 );
 
-const tabOptions: { label: string, method: "time" | "cycle" | "voltage" }[] = [
+const tabOptions: { label: string, method: "time" | "cycle" | "voltage" | "detect" }[] = [
     { label: "시간 - 전류/전압", method: "time" },
     { label: "사이클 - 용량/쿨롱효율", method: "cycle" },
-    { label: "전압 - dQ/dV", method: "voltage" }
+    { label: "전압 - dQ/dV", method: "voltage" },
+    { label: "", method: "detect" }
 ];
 
 const Analysis = (props: Props) => {
@@ -83,7 +94,7 @@ const Analysis = (props: Props) => {
     const [page, setPage] = useState<number>(0);
     const { data } = useGetExpMeta(experimentId!);
     const [fileIndex, setFileIndex] = useState<number>(0);
-    const [method, setMethod] = useState<"time" | "cycle" | "voltage">(tabOptions[0].method);
+    const [method, setMethod] = useState<"time" | "cycle" | "voltage" | "detect">(tabOptions[0].method);
 
     const { experiments, setKindFactors, setAmountFactors, setVariableFactor } = useFactorStore();
     const factors = experiments[experimentId!] || {
@@ -155,7 +166,7 @@ const Analysis = (props: Props) => {
                         <div className='flex flex-row w-full justify-between items-center'>
                             <div className='text-secondary text-2xl font-semibold'>데이터 목록</div>
                             <div className='flex flex-row space-x-2'>
-                                <button onClick={() => alert("이상치 버튼입니다!")}>
+                                <button onClick={() => setPage(3)}>
                                     <Warning />
                                 </button>
                                 <button onClick={() => navigate(`/view/${experimentId}/factor/select`)}>
@@ -164,7 +175,7 @@ const Analysis = (props: Props) => {
                             </div>
                         </div>
                         <div className="border-1 border-minor w-full mt-3"></div>
-                        <div className='w-full h-full px-4'>
+                        <div className='w-full h-full px-4 space-y-2 mt-2 overflow-auto'>
                             {
                                 isFetching ?
                                     <LoadingSpinner /> :
@@ -172,11 +183,10 @@ const Analysis = (props: Props) => {
                                         graphData.map((data: any, index: number) => (
                                             <div
                                                 key={index}
-                                                className={`flex flex-row items-center justify-between py-2 ${fileIndex === index ? "bg-gray-100" : ""}`}
+                                                className={`flex flex-row items-center justify-center text-center py-10 px-4 rounded-lg border-2 text-primary hover:bg-green transition-all ${fileIndex === index ? "bg-green" : "bg-white border-green"}`}
                                                 onClick={() => setFileIndex(index)}
                                             >
-                                                <div className="text-minor text-lg">{data.meta.experimentId}</div>
-                                                <div className="text-minor text-lg">파일 {index + 1}</div>
+                                                <div className={`text-center text-lg ${fileIndex === index ? "text-white" : ""}`}>{`${data.meta.experimentId}`}</div>
                                             </div>
                                         ))
                             }

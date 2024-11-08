@@ -1,7 +1,6 @@
-import { useMutation, UseMutationOptions, UseMutationResult, useQuery } from "@tanstack/react-query";
-import { ExperimentInfo, Electrode } from '../types/experiment';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ExperimentInfo, } from '../types/experiment';
 import { GetAxiosInstance, PostAxiosInstance } from "../axios/axios";
-import { useLoginStore } from "../store/auth";
 
 export const usePostExpInfo = () => {
     const { data, isError, isSuccess, isPending, mutate } = useMutation({
@@ -166,7 +165,7 @@ export const useGetExpResult = (props: PostExpDetectProps) => {
 };
 
 export const useUploadFile = (userName:string) => {
-  const { isError, isSuccess, isPending, mutate } = useMutation({
+  const { isError, isSuccess, isPending, mutate, data } = useMutation({
     mutationFn: async (data) => {
       const formData = createFormData(data,userName);
       return await PostAxiosInstance("/exp/upload", formData);
@@ -177,6 +176,7 @@ export const useUploadFile = (userName:string) => {
     isSuccess,
     isPending,
     mutate,
+    data
   };
 };
 const createFormData = (data: any, userName:any) => {

@@ -112,26 +112,29 @@ const FactorSelection: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-row">
       <Nav index={experimentId} />
-      <div className="flex flex-1 flex-col w-full items-start p-10 overflow-auto">
+      <div className="flex flex-1 flex-col w-full items-start p-10 ">
         <div className="w-full text-left font-bold text-4xl">고정인자/변동인자 선택하기</div>
         <div className="w-full text-left font-normal text-minor text-xl py-2">
           그래프 분석 시 원하는 고정인자와 변동인자를 선택해 주세요.
         </div>
-
         <div className="flex flex-row space-x-2 items-center justify-center mt-4">
           <h3 className="text-lg font-semibold">선택된 고정 인자 (종류):</h3>
           <div className="text-green">
             {experimentFactors.kindFactors.length > 0
-              ? experimentFactors.kindFactors.map((f) => `${f.name}:${f.value}`).join(", ")
+              ? experimentFactors.kindFactors.map((f) => <div
+                className="rounded-md border-1 border-green text-green py-2 px-4">{`${f.name} = ${f.value}`}</div>)
               : "선택되지 않음"}
           </div>
         </div>
 
         <div className="flex flex-row space-x-2 items-center justify-center mt-4">
           <h3 className="text-lg font-semibold">선택된 고정 인자 (함량):</h3>
-          <div className="text-blue">
+          <div className="flex flex-row space-x-2 text-blue">
             {experimentFactors.amountFactors.length > 0
-              ? experimentFactors.amountFactors.map((f) => `${f.name}:${f.value}`).join(", ")
+              ? experimentFactors.amountFactors.map((f) =>
+                <div
+                  className="rounded-md border-1 border-green text-green py-2 px-4">{`${f.name} = ${f.value}`}</div>
+              )
               : "선택되지 않음"}
           </div>
         </div>
@@ -140,12 +143,13 @@ const FactorSelection: React.FC = () => {
           <h3 className="text-lg font-semibold">선택된 변동 인자:</h3>
           <div className="text-red-400">
             {experimentFactors.variableFactor
-              ? `${experimentFactors.variableFactor.name}:${experimentFactors.variableFactor.value}`
+              ? <div
+                className="rounded-md border-1 border-red-400 text-red-400 py-2 px-4">{`${experimentFactors.variableFactor.name}`}</div>
               : "선택되지 않음"}
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-2 gap-x-2 gap-y-1 mt-5">
+        <div className="w-full grid grid-cols-2 gap-x-2 gap-y-1 mt-5 overflow-auto">
           {factors.map((factor, index) => (
             <div key={index} className="flex flex-col border-1 rounded-lg p-4">
               <div className="w-full flex flex-col justify-center items-start">
@@ -178,7 +182,6 @@ const FactorSelection: React.FC = () => {
             </div>
           ))}
         </div>
-
         <div className="flex flex-row w-full justify-between items-end mt-4">
           <button onClick={handleSubmit} className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light">
             분석하기
