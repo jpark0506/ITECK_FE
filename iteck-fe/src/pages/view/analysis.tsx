@@ -1,20 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Nav from '../../components/nav/nav'
 import EditSecondary from '../../assets/component/edit_secondary'
 import EditMinor from '../../assets/component/edit_minor'
-import { useNavigate, useNavigation, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Arrow from '../../assets/component/arrow'
 import Filter from '../../assets/component/filter'
 import Warning from '../../assets/component/warning'
 import { useGetExpMeta } from '../../api/api'
+import { useResultStore } from '../../store/result'
+import CycleDataChart from '../../components/chart'
 
 type Props = {}
 
 const Analysis = (props: Props) => {
-
-    const { id } = useParams();
-
+    const { id } = useParams<{ id: string }>();
     const { data } = useGetExpMeta(id!);
+    const experiment = useResultStore((state) => state.experiments[id!]);
+    const [cycleDataArray, setCycleDataArray] = useState<any[] | null>(null);
+
+    useEffect(() => {
+        if (experiment) {
+            const cycleKey = Object.keys(experiment.result[0].cycleDatas)[0]; // "cycle: 328b34cd-d258-4e0d-ae8b-2b33a1ac9ece" 키 가져오기
+            const cycleData = experiment.result[0].cycleDatas[cycleKey];
+            setCycleDataArray(cycleData); // cycleDataArray에 데이터 설정
+        }
+    }, [experiment]);
+
 
     const navigate = useNavigate();
 
@@ -30,7 +41,6 @@ const Analysis = (props: Props) => {
                     <div className="text-xl font-normal text-minor">실험일자 :{data.expDate || "날짜 없음"}</div>
                     <EditMinor />
                 </div>
-
                 <div className='flex flex-row items-center space-x-2 w-full'>
                     <button onClick={() => navigate(`/view/${id}`)}>
                         <Arrow />
@@ -43,22 +53,18 @@ const Analysis = (props: Props) => {
                 <div className='flex flex-row w-full'>
                     <div className='flex flex-col flex-1 w-3/4'>
                         <div className='flex flex-row space-x-6 text-minor text-xl mt-4 w-full'>
-                            <div>
-                                시간 - 전류/전압
-                            </div>
-                            <div>
-                                사이클 - 용량/쿨롱효율
-                            </div>
-                            <div>
-                                전압 - dQ/dV
-                            </div>
-                            <div>
-                                사용자 지정 그래프
-                            </div>
+                            <div>시간 - 전류/전압</div>
+                            <div>사이클 - 용량/쿨롱효율</div>
+                            <div>전압 - dQ/dV</div>
+                            <div>사용자 지정 그래프</div>
                         </div>
                         <div className="border-1 border-minor w-full mt-4"></div>
-                        <div className='w-full h-full'>
-                            그래프 표시
+                        <div className='w-full h-full mt-8'>
+                            {cycleDataArray ? (
+                                <CycleDataChart cycleDatas={cycleDataArray} />
+                            ) : (
+                                <div>Loading chart data...</div>
+                            )}
                         </div>
                     </div>
                     <div className='flex flex-col w-1/3 pl-4 mt-4'>
@@ -72,7 +78,6 @@ const Analysis = (props: Props) => {
                                     <Filter />
                                 </button>
                             </div>
-
                         </div>
                         <div className="border-1 border-minor w-full mt-3"></div>
                         <div className='w-full h-full'>
@@ -80,12 +85,9 @@ const Analysis = (props: Props) => {
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
         </div>
     )
 }
 
-export default Analysis
+export default Analysis;

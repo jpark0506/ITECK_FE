@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, UseMutationOptions, UseMutationResult, useQuery } from "@tanstack/react-query";
 import { ExperimentInfo, Electrode } from '../types/experiment';
 import { GetAxiosInstance, PostAxiosInstance } from "../axios/axios";
 export const usePostExpInfo = () => {
@@ -60,6 +60,76 @@ export const useGetExpMeta = (metaId:string) => {
     data,
   }
 }
+
+type Factor = {
+  name: string;
+  value: string;
+};
+
+type PostExpDetectProps = {
+  kindFactors: Factor[];
+  amountFactors: Factor[];
+  variableFactor: Factor | null;
+};
+
+const fetchExpDetect = async ({ kindFactors, amountFactors, variableFactor }: PostExpDetectProps) => {
+  const params: any = {}; // 빈 객체를 만들어 조건에 따라 필요한 항목을 추가
+
+  // '종류'나 '함량' 제거를 위한 이름 변환 함수
+  const normalizeName = (name: string) => {
+    return name.replace(/( 종류| 함량)$/, ""); // '종류'나 '함량'이 끝에 있을 경우 제거
+  };
+
+  if (kindFactors && kindFactors.length > 0) {
+    params.factorKind = kindFactors
+      .map((factor) => {
+        const name = normalizeName(factor.name);
+        return `${name}:${factor.value}`;
+      })
+      .join(",");
+  }
+
+  if (amountFactors && amountFactors.length > 0) {
+    params.factorAmount = amountFactors
+      .map((factor) => {
+        const name = normalizeName(factor.name);
+        return `${name}:${factor.value}`;
+      })
+      .join(",");
+  }
+
+  if (variableFactor) {
+    const name = normalizeName(variableFactor.name);
+    params.variable = `factorKind:${name}:${variableFactor.value}`;
+  }
+
+  const response = await GetAxiosInstance("/exp/detect", {
+    params,
+  });
+
+  return response.data.data;
+};
+
+
+export const useGetExpDetect = (props: PostExpDetectProps) => {
+  const { data, isError, isFetching, refetch, isFetched, isSuccess } = useQuery(
+    {
+      queryKey:["expDetect", props],
+      queryFn: () => fetchExpDetect(props),
+      enabled: false,
+    }
+  );
+
+  return {
+    data,
+    isError,
+    isFetching,
+    refetch,
+    isFetched,
+    isSuccess
+  };
+};
+
 export const useUploadFile = () => {
   const { isError, isSuccess, isPending, mutate } = useMutation({
     mutationFn: async (data) => {

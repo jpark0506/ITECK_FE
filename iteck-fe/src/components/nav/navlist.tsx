@@ -2,6 +2,7 @@ import React from "react";
 import Ex from "../../assets/component/ex";
 import { useNavigate } from "react-router-dom";
 import { useGetExpList } from "../../api/api";
+import { useResultStore } from "../../store/result";
 
 type Props = {
   index?: string;
@@ -19,6 +20,8 @@ const NavList = (props: Props) => {
 
   const { data: navList } = useGetExpList('박진영');
 
+  const { clear } = useResultStore();
+
   const { index } = props;
   return (
     <div className="w-full flex flex-1 flex-col text-white overflow-auto mt-3 space-y-2"
@@ -34,7 +37,11 @@ const NavList = (props: Props) => {
       )}
       {navList?.map((nav) => (
         <button
-          onClick={() => navigate(`/view/${nav?.id}`)}
+          onClick={() => {
+            clear();
+            navigate(`/view/${nav?.id}`)
+          }
+          }
           className={`${index === nav?.id ? 'bg-white text-primary' : 'bg-primary'}
           flex w-full text-left items-center flex-row font-normal p-3 rounded-lg border-1 border-primary hover:border-white hover:text-primary hover:bg-white transition-all py-2 px-4 space-x-2`}>
           <Ex />
