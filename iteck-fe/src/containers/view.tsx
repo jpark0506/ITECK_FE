@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Nav from '../components/nav/nav'
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EditSecondary from '../assets/component/edit_secondary';
 import EditMinor from '../assets/component/edit_minor';
 import { useGetExpMeta } from '../api/api';
@@ -14,26 +14,23 @@ const ExpView = (props: Props) => {
 
     const navigate = useNavigate();
 
-    const { isError, isSuccess, isPending, data } = useGetExpMeta(id!);
-
-    if (isPending) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError) {
-        return <div>Error loading data. Please try again.</div>;
-    }
+    const { isError, data } = useGetExpMeta(id!);
+    useEffect(() => {
+        if (data) {
+            console.log(data)
+        }
+    }, [])
 
     return (
         <div className="w-full h-full flex flex-row">
             <Nav index={id} />
             <div className="flex-1 flex flex-col items-start justify-start p-10 overflow-auto">
                 <div className='w-full flex items-end justify-start pb-3 space-x-2'>
-                    <div className="text-4xl font-bold">{data?.data?.title || "빈 제목"}</div>
+                    <div className="text-4xl font-bold">{data.title}</div>
                     <EditSecondary />
                 </div>
                 <div className='w-full flex flex-row items-end justify-start pb-3 space-x-2'>
-                    <div className="text-xl font-semib text-minor">실험일자 :{data?.data?.expDate || "빈 날짜"}  </div>
+                    <div className="text-xl font-semib text-minor">실험일자 :{data.expDate ? new Date(data.expDate).toISOString().split("T")[0] : ""}  </div>
                     <EditMinor />
                 </div>
                 <div className="border-1 border-minor w-full"></div>
@@ -43,7 +40,7 @@ const ExpView = (props: Props) => {
                         <EditSecondary />
                     </div>
                     <div className='w-full flex flex-col'>
-                        <div className="text-lg font-normal text-minor">{data?.data?.memo || "빈 메모"}</div>
+                        <div className="text-lg font-normal text-minor">{data.memo}</div>
                     </div>
                 </div>
                 <div className="text-3xl font-semibold text-primary pt-5 pb-5">조회할 항목을 선택해주세요</div>

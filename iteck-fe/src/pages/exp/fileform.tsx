@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useExperimentStore } from "../../store/experiment";
 import Nav from "../../components/nav/nav";
 import FactorModal from "./factorModal";
+import { use } from "framer-motion/client";
+import { useUploadFile } from "../../api/api";
 
 type Props = {};
 
@@ -21,6 +23,10 @@ const FileForm = (props: Props) => {
     initExperiments();
   }, [initExperiments]);
 
+  useEffect(() => {
+    console.log(experiments);
+  }, [experiments]);
+
   const onOpen = (fileIndex: number) => {
     setSelectedFileIndex(fileIndex);
     setIsOpen(true);
@@ -29,6 +35,26 @@ const FileForm = (props: Props) => {
   const onClose = () => {
     setIsOpen(false);
     setSelectedFileIndex(null);
+  };
+
+  const { mutate: uploadFile } = useUploadFile();
+
+  const handleUpload = (data: any) => {
+    const fileCount = data.filter((item: any) => item.file).length;
+    const factorCount = data.length;
+
+    if (fileCount !== factorCount) {
+      console.error("파일 개수와 factorDto 개수가 일치하지 않습니다.");
+      return;
+    }
+    uploadFile(data, {
+      onSuccess: () => {
+        console.log("Upload successful!");
+      },
+      onError: (error) => {
+        console.error("Error during upload:", error);
+      },
+    });
   };
 
   const onSubmit = () => {
@@ -123,7 +149,7 @@ const FileForm = (props: Props) => {
         <div className="flex flex-row w-full justify-between items-end mt-2">
           <div></div>
           <button
-            onClick={() => { }}
+            onClick={() => handleUpload(experiments)}
             className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light"
           >
             저장
