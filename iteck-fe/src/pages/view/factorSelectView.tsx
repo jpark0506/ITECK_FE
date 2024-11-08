@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Nav from "../../components/nav/nav";
 import { useGetExpDetect } from "../../api/api";
 import { useResultStore } from "../../store/result";
+import { useFactorStore } from "../../store/condition";
 
 type Factor = {
   name: string;
@@ -16,8 +17,8 @@ const initialFactors: Factor[] = [
   { name: "활물질 함량", isVariable: false, isFixed: false, value: "" },
   { name: "바인더 종류", isVariable: false, isFixed: false, value: "" },
   { name: "바인더 함량", isVariable: false, isFixed: false, value: "" },
-  { name: "도전체 종류", isVariable: false, isFixed: false, value: "" },
-  { name: "도전체 함량", isVariable: false, isFixed: false, value: "" },
+  { name: "도전재 종류", isVariable: false, isFixed: false, value: "" },
+  { name: "도전재 함량", isVariable: false, isFixed: false, value: "" },
   { name: "전해질 종류", isVariable: false, isFixed: false, value: "" },
   { name: "전해질 함량", isVariable: false, isFixed: false, value: "" },
   { name: "로딩량", isVariable: false, isFixed: false, value: "" },
@@ -36,9 +37,9 @@ const LoadingSpinner: React.FC = () => {
 
 const FactorSelection: React.FC = () => {
   const [factors, setFactors] = useState<Factor[]>(initialFactors);
-  const [variableFactor, setVariableFactor] = useState<Factor | null>(null);
-  const [kindFactors, setKindFactors] = useState<Factor[]>([]);
-  const [amountFactors, setAmountFactors] = useState<Factor[]>([]);
+
+  const { kindFactors, amountFactors, variableFactor, setKindFactors, setAmountFactors, setVariableFactor } = useFactorStore();
+
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ const FactorSelection: React.FC = () => {
     amountFactors,
     variableFactor,
   });
+
   const handleFactorChange = (index: number, field: "value" | "isVariable" | "isFixed", value?: string) => {
     setFactors((prevFactors) =>
       prevFactors.map((factor, i) => {
@@ -56,7 +58,6 @@ const FactorSelection: React.FC = () => {
             return factor;
           }
 
-          // Check if "isFixed" is selected without an existing value in factor
           if (field === "isFixed" && !factor.value) {
             alert("고정 인자는 값을 입력해야 선택 가능합니다.");
             return factor;

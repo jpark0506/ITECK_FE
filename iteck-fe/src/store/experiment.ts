@@ -35,7 +35,7 @@ export const useExperimentStore = create<ExperimentStore>((set, get) => ({
           factor: [
             { name: "활물질", type: "", amount: 0 },
             { name: "바인더", type: "", amount: 0 },
-            { name: "도전체", type: "", amount: 0 },
+            { name: "도전재", type: "", amount: 0 },
             { name: "전해질", type: "", amount: 0 },
           ],
           electrode: { area: "", loading: "", rollingRate: "" }, // 각 파일의 고유 전극 데이터

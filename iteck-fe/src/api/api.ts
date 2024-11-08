@@ -99,8 +99,13 @@ const fetchExpDetect = async ({ kindFactors, amountFactors, variableFactor }: Po
   }
 
   if (variableFactor) {
-    const name = normalizeName(variableFactor.name);
-    params.variable = `factorKind:${name}:${variableFactor.value}`;
+    if(variableFactor.name.includes("종류")) {
+      params.factorKind = `factorKind:${normalizeName(variableFactor.name)}:desc`;
+    }
+    if(variableFactor.name.includes("함량")) {
+      params.variable = `factorAmount:${normalizeName(variableFactor.name)}:desc`;
+    }
+    
   }
 
   const response = await GetAxiosInstance("/exp/detect", {
