@@ -91,9 +91,11 @@ const createFormData = (data: any) => {
 
     // 전극 데이터를 factorObject의 일부로 추가
     factors["전극"] = {
+      details:{
       "면적": item.electrode.area,
       "로딩량": item.electrode.loading,
       "압연율": item.electrode.rollingRate
+      }
     };
 
     const factorObject = {
