@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Nav from "../../components/nav/nav";
-import { useGetExpDetect } from "../../api/api";
-import { useResultStore } from "../../store/result";
 import { useFactorStore } from "../../store/condition";
 
 type Factor = {
@@ -37,19 +35,32 @@ const LoadingSpinner: React.FC = () => {
 
 const FactorSelection: React.FC = () => {
   const [factors, setFactors] = useState<Factor[]>(initialFactors);
-
-  const { kindFactors, amountFactors, variableFactor, setKindFactors, setAmountFactors, setVariableFactor } = useFactorStore();
-
-
-  const { id } = useParams();
+  const { id: experimentId } = useParams();
   const navigate = useNavigate();
-  const { data, isError, isFetching, refetch, isSuccess } = useGetExpDetect({
-    kindFactors,
-    amountFactors,
-    variableFactor,
-  });
 
-  const handleFactorChange = (index: number, field: "value" | "isVariable" | "isFixed", value?: string) => {
+  const {
+    experiments,
+    setKindFactors,
+    setAmountFactors,
+    setVariableFactor,
+    resetFactors,
+  } = useFactorStore();
+
+  const experimentFactors = experiments[experimentId!] || {
+    kindFactors: [],
+    amountFactors: [],
+    variableFactor: null,
+  };
+
+  useEffect(() => {
+    resetFactors(experimentId!);
+  }, [experimentId, resetFactors]);
+
+  const handleFactorChange = (
+    index: number,
+    field: "value" | "isVariable" | "isFixed",
+    value?: string
+  ) => {
     setFactors((prevFactors) =>
       prevFactors.map((factor, i) => {
         if (i === index) {
@@ -70,23 +81,21 @@ const FactorSelection: React.FC = () => {
             isFixed: field === "isFixed" ? !factor.isFixed : factor.isFixed,
           };
 
-          if (field === "isVariable" && updatedFactor.isVariable) {
-            setVariableFactor(updatedFactor);
-          } else if (field === "isVariable" && !updatedFactor.isVariable) {
-            setVariableFactor(null);
+          if (field === "isVariable") {
+            setVariableFactor(experimentId!, updatedFactor.isVariable ? updatedFactor : null);
           }
 
           if (field === "isFixed") {
             const updatedKindFactors = updatedFactor.isFixed && updatedFactor.name.includes("종류")
-              ? [...kindFactors, updatedFactor]
-              : kindFactors.filter((f) => f.name !== updatedFactor.name);
+              ? [...experimentFactors.kindFactors, updatedFactor]
+              : experimentFactors.kindFactors.filter((f) => f.name !== updatedFactor.name);
 
             const updatedAmountFactors = updatedFactor.isFixed && updatedFactor.name.includes("함량")
-              ? [...amountFactors, updatedFactor]
-              : amountFactors.filter((f) => f.name !== updatedFactor.name);
+              ? [...experimentFactors.amountFactors, updatedFactor]
+              : experimentFactors.amountFactors.filter((f) => f.name !== updatedFactor.name);
 
-            setKindFactors(updatedKindFactors);
-            setAmountFactors(updatedAmountFactors);
+            setKindFactors(experimentId!, updatedKindFactors);
+            setAmountFactors(experimentId!, updatedAmountFactors);
           }
 
           return updatedFactor;
@@ -96,29 +105,14 @@ const FactorSelection: React.FC = () => {
     );
   };
 
-
   const handleSubmit = async () => {
-    const { isSuccess, data } = await refetch();
-    if (isSuccess && data) {
-      if (data.length === 0) {
-        alert("해당하는 데이터가 없습니다. 다시 시도해주세요.");
-        return;
-      }
-
-      useResultStore.getState().setExperimentResult(String(id), data);
-      navigate(`/view/${id}/analysis`);
-    }
-
-    if (isError) {
-      alert("요청이 실패했습니다. 다시 시도해주세요.");
-    }
+    navigate(`/view/${experimentId}/analysis`);
   };
 
   return (
     <div className="w-full h-full flex flex-row">
-      <Nav index={id} />
-      {isFetching && <LoadingSpinner />}
-      <div className="flex flex-col w-full items-start p-10 overflow-auto">
+      <Nav index={experimentId} />
+      <div className="flex flex-1 flex-col w-full items-start p-10 overflow-auto">
         <div className="w-full text-left font-bold text-4xl">고정인자/변동인자 선택하기</div>
         <div className="w-full text-left font-normal text-minor text-xl py-2">
           그래프 분석 시 원하는 고정인자와 변동인자를 선택해 주세요.
@@ -127,20 +121,28 @@ const FactorSelection: React.FC = () => {
         <div className="flex flex-row space-x-2 items-center justify-center mt-4">
           <h3 className="text-lg font-semibold">선택된 고정 인자 (종류):</h3>
           <div className="text-green">
-            {kindFactors.length > 0 ? kindFactors.map((f) => `${f.name}:${f.value}`).join(", ") : "선택되지 않음"}
+            {experimentFactors.kindFactors.length > 0
+              ? experimentFactors.kindFactors.map((f) => `${f.name}:${f.value}`).join(", ")
+              : "선택되지 않음"}
           </div>
         </div>
 
         <div className="flex flex-row space-x-2 items-center justify-center mt-4">
           <h3 className="text-lg font-semibold">선택된 고정 인자 (함량):</h3>
           <div className="text-blue">
-            {amountFactors.length > 0 ? amountFactors.map((f) => `${f.name}:${f.value}`).join(", ") : "선택되지 않음"}
+            {experimentFactors.amountFactors.length > 0
+              ? experimentFactors.amountFactors.map((f) => `${f.name}:${f.value}`).join(", ")
+              : "선택되지 않음"}
           </div>
         </div>
 
         <div className="flex flex-row space-x-2 items-center justify-center mt-8">
           <h3 className="text-lg font-semibold">선택된 변동 인자:</h3>
-          <div className="text-red-400">{variableFactor ? `${variableFactor.name}:${variableFactor.value}` : "선택되지 않음"}</div>
+          <div className="text-red-400">
+            {experimentFactors.variableFactor
+              ? `${experimentFactors.variableFactor.name}:${experimentFactors.variableFactor.value}`
+              : "선택되지 않음"}
+          </div>
         </div>
 
         <div className="w-full grid grid-cols-2 gap-x-2 gap-y-1 mt-5">

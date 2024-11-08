@@ -1,4 +1,5 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type Factor = {
   name: string;
@@ -7,29 +8,72 @@ export type Factor = {
   value: string;
 };
 
-export type FactorStore = {
+export type ExperimentFactors = {
   kindFactors: Factor[];
   amountFactors: Factor[];
   variableFactor: Factor | null;
-  setKindFactors: (factors: Factor[]) => void;
-  setAmountFactors: (factors: Factor[]) => void;
-  setVariableFactor: (factor: Factor | null) => void;
-  resetFactors: () => void;
 };
 
-export const useFactorStore = create<FactorStore>((set) => ({
-  kindFactors: [],
-  amountFactors: [],
-  variableFactor: null,
-  
-  setKindFactors: (factors) => set({ kindFactors: factors }),
-  setAmountFactors: (factors) => set({ amountFactors: factors }),
-  setVariableFactor: (factor) => set({ variableFactor: factor }),
+export type FactorStore = {
+  experiments: Record<string, ExperimentFactors>;
+  setKindFactors: (experimentId: string, factors: Factor[]) => void;
+  setAmountFactors: (experimentId: string, factors: Factor[]) => void;
+  setVariableFactor: (experimentId: string, factor: Factor | null) => void;
+  resetFactors: (experimentId: string) => void;
+};
 
-  resetFactors: () =>
-    set({
-      kindFactors: [],
-      amountFactors: [],
-      variableFactor: null,
+export const useFactorStore = create(
+  persist<FactorStore>(
+    (set) => ({
+      experiments: {},
+
+      setKindFactors: (experimentId, factors) =>
+        set((state) => ({
+          experiments: {
+            ...state.experiments,
+            [experimentId]: {
+              ...state.experiments[experimentId],
+              kindFactors: factors,
+            },
+          },
+        })),
+
+      setAmountFactors: (experimentId, factors) =>
+        set((state) => ({
+          experiments: {
+            ...state.experiments,
+            [experimentId]: {
+              ...state.experiments[experimentId],
+              amountFactors: factors,
+            },
+          },
+        })),
+
+      setVariableFactor: (experimentId, factor) =>
+        set((state) => ({
+          experiments: {
+            ...state.experiments,
+            [experimentId]: {
+              ...state.experiments[experimentId],
+              variableFactor: factor,
+            },
+          },
+        })),
+
+      resetFactors: (experimentId) =>
+        set((state) => ({
+          experiments: {
+            ...state.experiments,
+            [experimentId]: {
+              kindFactors: [],
+              amountFactors: [],
+              variableFactor: null,
+            },
+          },
+        })),
     }),
-}));
+    {
+      name: "factor-storage",
+    }
+  )
+);

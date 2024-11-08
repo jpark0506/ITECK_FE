@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Plus from "../../assets/component/plus";
 import NavList from "./navlist";
 import LogoutButton from "./navlogoutbutton";
 import { useNavigate } from "react-router-dom";
+import { useLoginStore } from "../../store/auth";
 
 type Props = {
   index?: string;
@@ -12,6 +13,10 @@ type Props = {
 
 const Nav = (props: Props) => {
   const navigate = useNavigate();
+  const { setIsLogin, setUserName, userName } = useLoginStore();
+  useEffect(() => {
+    console.log(userName)
+  }, [])
   const { index } = props;
   return (
     <div className="flex flex-col w-1/6 h-full bg-primary p-4 text-white">
@@ -28,7 +33,7 @@ const Nav = (props: Props) => {
         실험을 위한 최적의 솔루션
       </div>
       <div className="w-full text-left font-bold text-md pb-3">
-        박준혁님, 환영합니다.
+        {`${userName}님, 환영합니다.`}
       </div>
 
       <button

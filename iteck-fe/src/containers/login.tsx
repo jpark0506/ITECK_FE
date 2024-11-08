@@ -7,19 +7,22 @@ import LoginTitle from "../components/title/logintitle";
 type Props = {};
 
 const Login = (props: Props) => {
-  const { setIsLogin } = useLoginStore();
+  const { setIsLogin, setUserName } = useLoginStore();
 
   const navigate = useNavigate();
-
+  const [name, setName] = React.useState("");
   const onLogin = () => {
     setIsLogin(true);
+    setUserName(name);
     navigate("/");
   };
   return (
     <div className="w-full h-full flex flex-row justify-center items-center">
       <LoginTitle />
       <div className="h-full w-1/2 flex flex-col justify-center items-center p-40 space-y-10 ">
-        <InputComponent placeholder="이메일을 입력해주세요" />
+        <InputComponent placeholder="이름을 입력해주세요"
+          value={name}
+          onChange={(e) => setName(e.target.value)} />
         <InputComponent placeholder="비밀번호를 입력해주세요" />
         <div className="w-full flex flex-row justify-between items-center">
           <button

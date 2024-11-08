@@ -3,6 +3,8 @@ import { useExperimentStore } from "../../store/experiment";
 import Nav from "../../components/nav/nav";
 import FactorModal from "./factorModal";
 import { useUploadFile } from "../../api/api";
+import { useNavigate } from "react-router-dom";
+import { useLoginStore } from "../../store/auth";
 
 type Props = {};
 
@@ -17,6 +19,8 @@ const FileForm = (props: Props) => {
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = React.useState<number | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     initExperiments();
@@ -36,7 +40,10 @@ const FileForm = (props: Props) => {
     setSelectedFileIndex(null);
   };
 
-  const { mutate: uploadFile } = useUploadFile();
+
+  const { userName } = useLoginStore();
+
+  const { mutate: uploadFile } = useUploadFile(userName!);
 
   const handleUpload = (data: any) => {
     const fileCount = data.filter((item: any) => item.file).length;
@@ -49,6 +56,7 @@ const FileForm = (props: Props) => {
     uploadFile(data, {
       onSuccess: () => {
         console.log("Upload successful!");
+        navigate("");
       },
       onError: (error) => {
         console.error("Error during upload:", error);

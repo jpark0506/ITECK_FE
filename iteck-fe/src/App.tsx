@@ -1,16 +1,17 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { Outlet, useOutlet } from "react-router-dom";
-
-
+import { AnimatePresence, motion } from "framer-motion";
+import { Outlet, useLocation } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const location = useLocation();
+
   return (
     <QueryClientProvider client={queryClient}>
+
       <Outlet />
+
     </QueryClientProvider>
   );
 }

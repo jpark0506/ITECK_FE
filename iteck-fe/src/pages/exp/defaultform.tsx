@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usePostExpInfo } from "../../api/api";
 import { useNavigate, useNavigation } from "react-router-dom";
+import { useLoginStore } from "../../store/auth";
 
 
 type Props = {
@@ -14,14 +15,16 @@ const DefaultForm = (props: Props) => {
   const [experimentDate, setExperimentDate] = useState(new Date().toISOString().split("T")[0]);
   const [experimentMemo, setExperimentMemo] = useState("");
 
-  const { mutate, isSuccess } = usePostExpInfo();
+  const { data, mutate, isSuccess } = usePostExpInfo();
+
+  const { userName } = useLoginStore();
 
   const navigate = useNavigate();
 
   const handleSubmit = () => {
     mutate({
       id: '',
-      userName: "박진영",
+      userName: userName!,
       title: experimentTitle,
       memo: experimentMemo,
       expDate: new Date(experimentDate).toISOString().split("T")[0]
@@ -30,8 +33,10 @@ const DefaultForm = (props: Props) => {
 
   useEffect(() => {
     if (isSuccess) {
+
       alert('성공적으로 추가되었습니다.')
-      navigate("/")
+      console.log(data)
+      navigate(`/view/${data?.data.data.id}`)
     }
   }, [isSuccess])
 

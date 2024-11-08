@@ -23,7 +23,7 @@ const Simulation = (props: Props) => {
                     <EditSecondary />
                 </div>
                 <div className='w-full flex flex-row items-end justify-start pb-3 space-x-2'>
-                    <div className="text-xl font-semib text-minor">실험일자 :{data.expDate} </div>
+                    <div className="text-xl font-semib text-minor">실험일자 :{data.expDate ? new Date(data.expDate).toISOString().split("T")[0] : ""}  </div>
                     <EditMinor />
                 </div>
                 <div className="border-1 border-minor w-full"></div>

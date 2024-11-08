@@ -1,13 +1,16 @@
 import { useMutation, UseMutationOptions, UseMutationResult, useQuery } from "@tanstack/react-query";
 import { ExperimentInfo, Electrode } from '../types/experiment';
 import { GetAxiosInstance, PostAxiosInstance } from "../axios/axios";
+import { useLoginStore } from "../store/auth";
+
 export const usePostExpInfo = () => {
-    const { isError, isSuccess, isPending, mutate } = useMutation({
+    const { data, isError, isSuccess, isPending, mutate } = useMutation({
     mutationFn: async (data : ExperimentInfo) => {
       return await PostAxiosInstance<ExperimentInfo>("/exp/meta/post", data);
     },
   });
   return {
+    data,
     isError,
     isSuccess,
     isPending,
@@ -17,7 +20,7 @@ export const usePostExpInfo = () => {
 
 export const useGetExpList = (name:string) => {
 
-  const { isError, isSuccess, isPending, data } = useQuery<ExperimentInfo[]>({
+  const { isError, isSuccess, isPending, data , isFetching } = useQuery<ExperimentInfo[]>({
     queryKey: ['experiment'],
     queryFn: async () => {
       const response = await GetAxiosInstance<ExperimentInfo[]>(`/exp/meta/get?userName=${name}`);
@@ -27,7 +30,7 @@ export const useGetExpList = (name:string) => {
   return {
     isError,
     isSuccess,
-    isPending,
+    isFetching,
     data,
   };
 }
@@ -67,17 +70,19 @@ type Factor = {
 };
 
 type PostExpDetectProps = {
+  yFactor?: "current" | "voltage" | "dchgToChg" | "chgToDchg";
   kindFactors: Factor[];
   amountFactors: Factor[];
   variableFactor: Factor | null;
+  method : "time" | "cycle" | "voltage" | "detect";
 };
 
-const fetchExpDetect = async ({ kindFactors, amountFactors, variableFactor }: PostExpDetectProps) => {
+const fetchExpData = async ({ kindFactors, amountFactors, variableFactor, yFactor, method }: PostExpDetectProps) => {
   const params: any = {}; // 빈 객체를 만들어 조건에 따라 필요한 항목을 추가
 
   // '종류'나 '함량' 제거를 위한 이름 변환 함수
   const normalizeName = (name: string) => {
-    return name.replace(/( 종류| 함량)$/, ""); // '종류'나 '함량'이 끝에 있을 경우 제거
+    return name.replace(/( 종류| 함량)$/, "");
   };
 
   if (kindFactors && kindFactors.length > 0) {
@@ -100,28 +105,53 @@ const fetchExpDetect = async ({ kindFactors, amountFactors, variableFactor }: Po
 
   if (variableFactor) {
     if(variableFactor.name.includes("종류")) {
-      params.factorKind = `factorKind:${normalizeName(variableFactor.name)}:desc`;
+      params.variable = `factorKind:${normalizeName(variableFactor.name)}:desc`;
     }
     if(variableFactor.name.includes("함량")) {
       params.variable = `factorAmount:${normalizeName(variableFactor.name)}:desc`;
     }
-    
+  }
+  if (yFactor) {
+    if(method == "cycle" && yFactor == "current" || yFactor=="voltage")
+    params.yFactor = "dchgToChg";
+    else if(method == "time" && yFactor == "dchgToChg" || yFactor=="chgToDchg")
+    params.yFactor = "current";
+    else
+    params.yFactor = yFactor;
   }
 
-  const response = await GetAxiosInstance("/exp/detect", {
-    params,
-  });
-
-  return response.data.data;
+  switch(method){
+    case "time":
+       const timeresponse = await GetAxiosInstance("/exp/import/time", {
+          params,
+        });
+        console.log(timeresponse);
+        return timeresponse.data.data;
+    case "cycle":
+      const cycleresponse = await GetAxiosInstance("/exp/import/cycle", {
+          params,
+        });
+        return cycleresponse.data.data;
+    case "voltage":
+      const voltageresponse = await GetAxiosInstance("/exp/import/voltage", {
+          params,
+        });
+        return voltageresponse.data.data;
+    case "detect":
+      const detectresponse = await GetAxiosInstance("/exp/detect", {
+          params,
+        });
+        return detectresponse.data.data;
+  }
 };
 
-
-export const useGetExpDetect = (props: PostExpDetectProps) => {
-  const { data, isError, isFetching, refetch, isFetched, isSuccess } = useQuery(
+export const useGetExpResult = (props: PostExpDetectProps) => {
+  const { data, isError, isFetching, refetch, isFetched, isSuccess, } = useQuery(
     {
-      queryKey:["expDetect", props],
-      queryFn: () => fetchExpDetect(props),
+      queryKey:["expResult", props],
+      queryFn: () => fetchExpData(props),
       enabled: false,
+      initialData:[],
     }
   );
 
@@ -135,10 +165,10 @@ export const useGetExpDetect = (props: PostExpDetectProps) => {
   };
 };
 
-export const useUploadFile = () => {
+export const useUploadFile = (userName:string) => {
   const { isError, isSuccess, isPending, mutate } = useMutation({
     mutationFn: async (data) => {
-      const formData = createFormData(data);
+      const formData = createFormData(data,userName);
       return await PostAxiosInstance("/exp/upload", formData);
     },
   });
@@ -149,7 +179,7 @@ export const useUploadFile = () => {
     mutate,
   };
 };
-const createFormData = (data: any) => {
+const createFormData = (data: any, userName:any) => {
   const formData = new FormData();
 
   data.forEach((item: any) => {
@@ -175,7 +205,7 @@ const createFormData = (data: any) => {
 
     const factorObject = {
       factors,
-      userName:"프론트"
+      userName:userName
     }
 
     // factorObject를 배열로 감싸 JSON 문자열로 변환 후 추가

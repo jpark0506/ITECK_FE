@@ -2,11 +2,13 @@ import React from "react";
 import LoginTitle from "../components/title/logintitle";
 import Plus from "../assets/component/plus";
 import { useNavigate } from "react-router-dom";
+import { useLoginStore } from "../store/auth";
 
 type Props = {};
 
 const MainPage = (props: Props) => {
   const navigate = useNavigate();
+  const { userName } = useLoginStore();
 
   return (
     <div className="flex flex-1 h-full justify-center items-center">
@@ -16,7 +18,7 @@ const MainPage = (props: Props) => {
           실험을 위한 최고의 솔루션
         </div>
         <div className="w-full text-4xl font-semibold text-left">
-          안녕하세요, 박준혁님!
+          안녕하세요, {userName!}님!
         </div>
         <button
           onClick={() => navigate("/create/analysis")}
