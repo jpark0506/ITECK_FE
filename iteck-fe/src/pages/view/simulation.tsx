@@ -19,11 +19,11 @@ const Simulation = (props: Props) => {
             <Nav index={id} />
             <div className="flex-1 flex flex-col items-start justify-start p-10 overflow-auto">
                 <div className='w-full flex items-end justify-start pb-3 space-x-2'>
-                    <div className="text-4xl font-bold">{data!.data.title}</div>
+                    <div className="text-4xl font-bold">{data.title}</div>
                     <EditSecondary />
                 </div>
                 <div className='w-full flex flex-row items-end justify-start pb-3 space-x-2'>
-                    <div className="text-xl font-semib text-minor">실험일자 :{data!.data.date} </div>
+                    <div className="text-xl font-semib text-minor">실험일자 :{data.expDate} </div>
                     <EditMinor />
                 </div>
                 <div className="border-1 border-minor w-full"></div>
@@ -34,7 +34,7 @@ const Simulation = (props: Props) => {
                     </div>
                     {/* 여러줄인거 고려하기 */}
                     <div className='w-full flex flex-col'>
-                        <div className="text-lg font-normal text-minor">{data!.data.memo}</div>
+                        <div className="text-lg font-normal text-minor">{data.memo}</div>
                     </div>
                 </div>
             </div>

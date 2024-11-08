@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useExperimentStore } from "../../store/experiment";
 import Nav from "../../components/nav/nav";
 import FactorModal from "./factorModal";
-import { use } from "framer-motion/client";
 import { useUploadFile } from "../../api/api";
 
 type Props = {};
@@ -104,22 +103,15 @@ const FileForm = (props: Props) => {
           <div>
             <div className="text-primary font-semibold text-2xl mt-4">업로드한 파일</div>
             {experiments.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-3 gap-4 mt-4">
                 {experiments.map((experiment, index) => (
                   <div
                     key={index}
                     className="flex flex-1 flex-col justify-start items-start p-4 border bg-green rounded-lg text-center text-white"
                   >
-                    <div className="text-white font-semibold text-xl">{experiment.name}</div>
-
-                    <button
-                      className="w-full py-2 bg-white text-green hover:bg-gray-300 rounded-md mt-5 transition-all"
-                      onClick={() => onOpen(index)}
-                    >
-                      고유 인자 입력하기
-                    </button>
-
-                    <div className="text-left mt-4 text-sm text-white">
+                    <div className="text-white text-left font-semibold text-xl">{experiment.name}</div>
+                    <div className="border-1 border-white w-full mt-2"></div>
+                    <div className="text-left mt-2 text-sm text-white">
                       <div className="font-semibold">Factor Types:</div>
                       {experiment.factor.length > 0 ? (
                         experiment.factor.map((factor, factorIndex) => (
@@ -131,13 +123,21 @@ const FileForm = (props: Props) => {
                         <div>입력된 고유 인자가 없습니다.</div>
                       )}
                     </div>
+                    <div className="w-full flex flex-row space-x-2">
+                      <button
+                        className="flex-1 py-2 bg-white text-green hover:bg-gray-300 rounded-md mt-5 transition-all"
+                        onClick={() => onOpen(index)}
+                      >
+                        고유 인자 입력하기
+                      </button>
+                      <button
+                        onClick={() => deleteFile(index)}
+                        className="flex-1 py-2 bg-red-400 hover:bg-red-300 transition-all text-white rounded-md mt-5"
+                      >
+                        삭제
+                      </button>
+                    </div>
 
-                    <button
-                      onClick={() => deleteFile(index)}
-                      className="w-full py-2 bg-red-500 hover:bg-red-400 transition-all text-white rounded-md mt-5"
-                    >
-                      삭제
-                    </button>
                   </div>
                 ))}
               </div>
