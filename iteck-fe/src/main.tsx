@@ -14,6 +14,7 @@ import FileForm from "./pages/exp/fileform";
 import Analysis from "./pages/view/analysis";
 import Simulation from "./pages/view/simulation";
 import FactorSelectView from "./pages/view/factorSelectView";
+import SimulationForm from "./pages/simulation";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/view/:id/simulation",
-        element: <Simulation />
+        element: <SimulationForm />
       },
       {
         path: "/view/:id/factor/select",
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
           },
           {
             path: "simulation",
-            element: <Create />,
+            element: <Simulation />,
           },
 
         ],

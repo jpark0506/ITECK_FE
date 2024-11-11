@@ -73,8 +73,7 @@ const ExpView = (props: Props) => {
                         </p>
                         <button
                             onClick={() => {
-                                alert('미완성된 기능입니다.')
-                                //navigate(`/view/${id}/simulation`)
+                                navigate(`/view/${id}/simulation`)
                             }}
                             className="bg-primary font-bold px-10 py-4 text-white border-white border-1 text-sm rounded-lg mt-4 hover:bg-white hover:text-primary hover:border-primary transition-all "
                         >
