@@ -19,7 +19,7 @@ const SimulationResult: React.FC<SimulationResultProps> = ({ imgData }) => {
                     <div className="flex flex-row justify-between text-4xl font-bold mb-4">
                         시뮬레이션 결과
                         <button
-                            onClick={() => window.location.reload()}
+                            onClick={() => navigate(-1)}
                             className="bg-primary px-10 py-4 text-white text-sm rounded-lg font-light"
                         >
                             뒤로가기
