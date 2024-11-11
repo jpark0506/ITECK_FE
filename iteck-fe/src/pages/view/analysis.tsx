@@ -186,7 +186,7 @@ const Analysis = (props: Props) => {
                                                 className={`flex flex-row items-center justify-center text-center py-10 px-4 rounded-lg border-2 text-primary hover:bg-green transition-all ${fileIndex === index ? "bg-green" : "bg-white border-green"}`}
                                                 onClick={() => setFileIndex(index)}
                                             >
-                                                <div className={`text-center text-lg ${fileIndex === index ? "text-white" : ""}`}>{`${data.meta.experimentId}`}</div>
+                                                <div className={`text-center text-lg ${fileIndex === index ? "text-white" : ""}`}>{`${data.meta?.fileName !== null ? data.meta.fileName : data.meta.experimentId} `}</div>
                                             </div>
                                         ))
                             }
