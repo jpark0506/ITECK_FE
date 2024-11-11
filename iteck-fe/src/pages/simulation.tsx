@@ -61,7 +61,7 @@ const SimulationForm: React.FC<Props> = () => {
 
         try {
             setLoading(true);
-            const response = await axios.post('http://iteck.duckdns.org/flask/simulate', params, {
+            const response = await axios.post('https://iteck.duckdns.org/flask/simulate', params, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             });
             console.log(response)
